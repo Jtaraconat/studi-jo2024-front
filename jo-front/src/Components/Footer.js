@@ -13,10 +13,10 @@ export default function Footer() {
       </div>
 
       <div className="col-span-6 flex flex-col items-end text-white font-bold ">
-        <a href="">Accueil</a>
-        <a href="">Tickets</a>
-        <a href="">Espace utilisateur</a>
-        <a href="">Espace administrateur</a>
+        <a href="/">Accueil</a>
+        <a href="/tickets">Tickets</a>
+        <a href="/user">Espace utilisateur</a>
+        <a href="/admin">Espace administrateur</a>
         <a href="">C.G.V</a>
         <a href="">C.G.U</a>
         <a href="">Mentions légales</a>

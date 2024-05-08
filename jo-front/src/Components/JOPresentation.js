@@ -9,6 +9,9 @@ export default function JOPresentation() {
     <div>
       <div className="my-3 col-span-12 grid grid-cols-12 items-center gap-2">
         <div className="col-span-8">
+          <h3 className="text-2xl font-mukta underline decoration-joblue">
+            Les sports représentés
+          </h3>
           <p>
             Les Jeux de Paris 2024 présenteront une diversité de sports
             captivants, mettant en vedette à la fois les disciplines
@@ -20,21 +23,19 @@ export default function JOPresentation() {
           </p>
         </div>
         <div className="col-span-4">
-          <h3 className="text-2xl font-mukta underline decoration-joblue">
-            Les sports représentés
-          </h3>
+          <img src={sports} alt="sports" />
         </div>
       </div>
 
       <div className="my-3 col-span-12 grid grid-cols-12  items-center gap-2">
         <div className="col-span-4">
-          {" "}
-          <h3 className="text-2xl font-mukta underline decoration-joblue">
-            Durabilité et innovation
-          </h3>
+          <img src={innovation} alt="innovation" />
         </div>
 
         <div className="col-span-8">
+          <h3 className="text-2xl font-mukta underline decoration-joblue">
+            Durabilité et innovation
+          </h3>
           <p>
             Les Jeux de Paris 2024 seront également à la pointe de la durabilité
             et de l'innovation. Avec un engagement ferme envers des pratiques
@@ -50,6 +51,9 @@ export default function JOPresentation() {
 
       <div className="my-3 col-span-12 grid grid-cols-12  items-center gap-2">
         <div className="col-span-8">
+          <h3 className="text-2xl font-mukta underline decoration-joblue">
+            Culture et Héritage
+          </h3>
           <p>
             Au-delà des compétitions sportives, les Jeux de Paris 2024 seront
             une célébration de la diversité culturelle et de l'héritage
@@ -61,9 +65,7 @@ export default function JOPresentation() {
         </div>
 
         <div className="col-span-4">
-          <h3 className="text-2xl font-mukta underline decoration-joblue">
-            Culture et Héritage
-          </h3>
+          <img src={culture} alt="culture" />
         </div>
       </div>
     </div>
