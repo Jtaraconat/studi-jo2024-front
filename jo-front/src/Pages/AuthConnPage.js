@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Login from "../Components/Login";
-import SignIn from "../Components/SignIn";
+import LoginForm from "../Components/LoginForm";
+import SignInForm from "../Components/SignInForm";
 
 export default function AuthConn() {
   const [checkedValue, setCheckedvalue] = useState("Se connecter");
@@ -31,9 +31,9 @@ export default function AuthConn() {
       </div>
 
       {checkedValue === "" ? null : checkedValue === "Se connecter" ? (
-        <Login />
+        <LoginForm />
       ) : (
-        <SignIn />
+        <SignInForm />
       )}
     </div>
   );

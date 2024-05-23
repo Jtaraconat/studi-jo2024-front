@@ -1,10 +1,11 @@
 import React from "react";
+
 import HeroBanner from "../Components/HeroBanner";
 import SportCard from "../Cards/SportCard";
 import JOPresentation from "../Components/JOPresentation";
 import basket from "../Assets/basketball.png";
 import football from "../Assets/football.png";
-import rugby from "../Assets/rugby7.png";
+import rugby from "../Assets/rugby.png";
 import handball from "../Assets/handball.png";
 import CeremonyCard from "../Cards/CeremonyCard";
 

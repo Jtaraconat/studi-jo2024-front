@@ -1,8 +1,14 @@
-import { Outlet, Navigate } from "react-router-dom";
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const ProtectedRoute = () => {
-  let auth = { token: false };
-  return auth.token ? <Outlet /> : <Navigate to="/login" />;
+const isAuthenticated = () => {
+  const userToken = Cookies.get("user-token");
+  return userToken;
+};
+
+const ProtectedRoute = ({ redirectTo = "/login" }) => {
+  return isAuthenticated() ? <Outlet /> : <Navigate to={redirectTo} />;
 };
 
 export default ProtectedRoute;
