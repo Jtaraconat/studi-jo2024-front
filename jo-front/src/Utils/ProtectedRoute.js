@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "./GlobalContext";
 import { Navigate, Outlet } from "react-router-dom";
 import Cookies from "js-cookie";
 

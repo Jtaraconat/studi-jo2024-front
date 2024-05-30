@@ -1,7 +1,9 @@
 import React from "react";
 import ceremonie from "../Assets/ceremonie.jpg";
+import { useNavigate } from "react-router-dom";
 
 export default function CeremonyCard() {
+  const navigate = useNavigate();
   return (
     <div
       className="col-span-12 bg-center bg-cover bg-no-repeat py-10 text-white rounded-lg p-3"
@@ -16,7 +18,10 @@ export default function CeremonyCard() {
         N'hésitez pas à consulter nos offres pour participer aux deux cérémonies
         qui ouvriront et clotureront ces jeux olympiques.
       </p>
-      <button className="border-2 border-white rounded-full p-3">
+      <button
+        className="border-2 border-white rounded-full p-3"
+        onClick={() => navigate("/tickets")}
+      >
         Voir les offres
       </button>
     </div>

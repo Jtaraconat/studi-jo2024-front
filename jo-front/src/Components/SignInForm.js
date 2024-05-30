@@ -9,8 +9,11 @@ export default function SignInForm() {
     email: "",
     password: "",
   });
-  const POST_URL = "http://localhost:8080/api/register";
+  const POST_URL =
+    "https://studi24-backend-540631c3ca2e.herokuapp.com/api/register";
   const navigate = useNavigate();
+  const [emailMessage, setEmailMessage] = useState("");
+  const [globalErrorMessage, setGlobalErrorMessage] = useState("");
 
   function getFirstname(e) {
     e.preventDefault();
@@ -22,23 +25,38 @@ export default function SignInForm() {
     setCredentials({ ...credentials, lastname: e.target.value });
   }
 
-  function getEmail(e) {
-    e.preventDefault();
-    setCredentials({ ...credentials, email: e.target.value });
-  }
-
   function getPassword(e) {
     e.preventDefault();
     setCredentials({ ...credentials, password: e.target.value });
   }
 
+  function handleEmail(e) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(e.target.value) === true && e.target.value !== "") {
+      setEmailMessage("");
+      setCredentials({ ...credentials, email: e.target.value });
+    } else {
+      setEmailMessage("L'adresse e-mail n'est pas valide");
+    }
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
-    try {
-      const res = await axios.post(POST_URL, credentials);
-      navigate("/tickets");
-    } catch (error) {
-      console.log(error);
+    if (
+      credentials.email !== "" &&
+      credentials.firstname !== "" &&
+      credentials.lastname !== "" &&
+      credentials.password !== ""
+    ) {
+      try {
+        const res = await axios.post(POST_URL, credentials);
+        navigate("/login");
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setGlobalErrorMessage("Un ou plusieurs champs sont manquants");
     }
   }
 
@@ -66,13 +84,16 @@ export default function SignInForm() {
             onChange={getFirstname}
           ></input>
 
-          <label htmlFor="e-mail">Email:</label>
-          <input
-            type="text"
-            id="e-mail"
-            className="border-2 rounded-lg p-1"
-            onChange={getEmail}
-          ></input>
+          <div className="flex flex-col">
+            <label htmlFor="e-mail">Email:</label>
+            <input
+              type="text"
+              id="e-mail"
+              className="border-2 rounded-lg p-1"
+              onChange={handleEmail}
+            ></input>
+            <p className="text-xs text-red-500">{emailMessage}</p>
+          </div>
 
           <label htmlFor="password">Mot de passe:</label>
           <input
@@ -84,12 +105,15 @@ export default function SignInForm() {
         </div>
 
         <div className="flex flex-row justify-end">
-          <button
-            className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all my-3"
-            onClick={onSubmit}
-          >
-            Créer un compte
-          </button>
+          <div className="flex flex-col">
+            <button
+              className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all my-3"
+              onClick={onSubmit}
+            >
+              Créer un compte
+            </button>
+            <p className="text-cs text-red-500">{globalErrorMessage}</p>
+          </div>
         </div>
       </form>
     </div>

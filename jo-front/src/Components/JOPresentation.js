@@ -9,7 +9,7 @@ export default function JOPresentation() {
     <div>
       <div className="my-3 col-span-12 grid grid-cols-12 items-center gap-2">
         <div className="col-span-8">
-          <h3 className="text-2xl font-mukta underline decoration-joblue">
+          <h3 className="text-lg md:text-2xl font-mukta underline decoration-joblue">
             Les sports représentés
           </h3>
           <p>
@@ -75,10 +75,10 @@ export default function JOPresentation() {
     <div className="col-span-12 grid grid-cols-12 p-3 rounded-lg gap-3">
       <div className="col-span-12 mb-5">
         <div className="mb-5">
-          <h2 className="text-5xl font-bold text-center text-joblue font-mukta">
+          <h2 className="text-3xl md:text-5xl font-bold text-center text-joblue font-mukta">
             Les Jeux Olympiques de Paris 2024
           </h2>
-          <h2 className="text-5xl font-bold text-center text-joblue mb-5 font-mukta">
+          <h2 className="text-3xl md:text-5xl font-bold text-center text-joblue mb-5 font-mukta">
             Une Célébration Mondiale du Sport
           </h2>
           <p className="font-bold text-center">
@@ -114,8 +114,4 @@ export default function JOPresentation() {
       </div>
     </div>
   );
-}
-
-{
-  /* */
 }

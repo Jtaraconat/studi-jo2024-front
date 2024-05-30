@@ -2,37 +2,33 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TicketInCartCard from "../Cards/TicketInCartCard";
 import AxiosConfig from "../Utils/AxiosConfig";
 
 export default function ShoppingCart() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const userToken = Cookies.get("user-token");
   const userId = Cookies.get("user-id");
   const firstname = Cookies.get("firstname");
   const lastname = Cookies.get("lastname");
   const [itemsInCart, setItemsInCart] = useState([]);
-
-  const token = Cookies.get();
-  console.log(token);
+  const [isLoading, setIsLoading] = useState(true);
+  const GET_URL = "https://studi24-backend-540631c3ca2e.herokuapp.com";
 
   useEffect(() => {
     getItems();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }, []);
 
   async function getItems() {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/cart/items/${userId}`,
+        `${GET_URL}/api/cart/items/${userId}`,
         AxiosConfig
       );
-      console.log(res);
-
-      res.data.map((item) => {
-        setItemsInCart(res.data);
-      });
+      setItemsInCart(res.data);
     } catch (e) {
       console.log(e);
     }
@@ -44,14 +40,17 @@ export default function ShoppingCart() {
     Cookies.remove("firstname");
     Cookies.remove("lastname");
     navigate("/");
+    window.location.reload();
   }
 
   function goToPayment() {
-    navigate("/payment", { state: { itemsInCart } });
+    if (itemsInCart.length != 0) {
+      navigate("/payment", { state: { itemsInCart } });
+    }
   }
 
   return (
-    <div className="grid grid-cols-12 p-3">
+    <div className="grid grid-cols-12 p-2">
       <div className="col-span-12">
         <div className="flex flex-col justify-between">
           <div>
@@ -71,10 +70,16 @@ export default function ShoppingCart() {
         </div>
       </div>
 
-      {itemsInCart.length === 0 ? (
+      {itemsInCart.length === 0 && !isLoading ? (
         <div className="col-span-12 my-5">
           <p className="text-center text-3xl font-semibold">
             Votre panier est vide!
+          </p>
+        </div>
+      ) : isLoading ? (
+        <div className="col-span-12 my-5">
+          <p className="text-center text-3xl font-semibold animate-pulse">
+            Chargement...
           </p>
         </div>
       ) : (
@@ -83,19 +88,23 @@ export default function ShoppingCart() {
             return (
               <TicketInCartCard
                 key={item.cartItemID}
-                ticketId={item.ticketID}
                 cartItemId={item.cartItemID}
-                userId={userId}
                 eventName={item.eventName}
-                quantity={item.quantity}
                 price={item.price}
+                image={item.imageURL}
+                day={item.day}
+                time={item.time}
+                ticketType={item.ticketType}
+                sport={item.sport}
+                city={item.city}
+                location={item.eventLocation}
               />
             );
           })}
         </div>
       )}
 
-      {itemsInCart === 0 ? (
+      {itemsInCart.length === 0 ? (
         <div className="col-span-12 flex flex-row justify-end">
           <button
             className="col-span-6 border-2 border-emerald-500 rounded-full p-3 hover:bg-emerald-500 hover:text-white transition-all"
@@ -107,7 +116,7 @@ export default function ShoppingCart() {
       ) : (
         <div className="col-span-12 flex flex-row justify-end">
           <button
-            className="col-span-6 border-2 border-emerald-500 rounded-full p-3 hover:bg-emerald-500 hover:text-white transition-all"
+            className="col-span-6 border-2 border-emerald-500 rounded-full p-3 hover:bg-emerald-500 hover:text-white transition-all text-xl"
             onClick={goToPayment}
           >
             Procéder au paiement

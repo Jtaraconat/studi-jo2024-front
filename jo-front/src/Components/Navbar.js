@@ -4,38 +4,28 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import AxiosConfig from "../Utils/AxiosConfig";
+import { useGlobalContext } from "../Utils/GlobalContext";
 
 export default function Navbar() {
   const userId = Cookies.get("user-id");
-  const [cartLength, setCartLength] = useState();
-  let count = 0;
-
-  async function getItems() {
-    try {
-      const res = await axios.get(
-        `http://localhost:8080/api/cart/items/${userId}`,
-        AxiosConfig
-      );
-      setCartLength(res.data.reduce((total, item) => total + item.quantity, 0));
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  useEffect(() => {
-    getItems();
-  }, [cartLength]);
+  const { userRole, updateUserRole } = useGlobalContext();
 
   return (
-    <div className="flex flex-col mb-5">
+    <div className="flex flex-col shadow shadow-joblue">
       <img src={logo24} alt="logo" className="size-24 mb-5" />
       <nav className="flex justify-around">
         <Link to="/">Accueil</Link>
         <Link to="/tickets">Tickets</Link>
-        <Link to="/shopping-cart">
-          {cartLength === 0 ? `Panier(x${cartLength})` : "Panier"}
-        </Link>
-        <Link to="/admin">Espace administrateur</Link>
+
+        {userRole === "ADMIN" ? null : (
+          <Link to="/shopping-cart">Mon panier</Link>
+        )}
+
+        {userRole === "" ? (
+          <Link to="/login">Se connecter</Link>
+        ) : userRole === "ADMIN" ? (
+          <Link to="/admin">Espace administrateur</Link>
+        ) : null}
       </nav>
     </div>
   );

@@ -2,22 +2,20 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import TicketInPaymentCard from "../Cards/TicketInPaymentCard";
 import Cookies from "js-cookie";
-import axios from "axios";
+import PaymentInfos from "../Components/PaymentInfos";
 
 export default function PaiementPage() {
   const location = useLocation();
   const userId = Cookies.get("user-id");
-  const POST_URI = `http://localhost:8080/api/order/create/${userId}`;
-  let totalPrice = 0;
 
-  async function payOrder() {
-    const res = await axios.post(POST_URI);
-    console.log(res);
-  }
+  let totalPrice = 0;
+  console.log(location.state);
 
   return (
-    <div>
-      <h2 className="text-center text-2xl">Récapitulatif de la commande:</h2>
+    <div className="p-3 grid grid-cols-12">
+      <h2 className="col-span-12 text-center text-2xl">
+        Récapitulatif de la commande:
+      </h2>
       <div className="col-span-12">
         {location.state.itemsInCart.map((item) => {
           return (
@@ -28,12 +26,15 @@ export default function PaiementPage() {
               eventName={item.eventName}
               quantity={item.quantity}
               price={item.price}
+              ticketType={item.ticketType}
+              sport={item.sport}
+              date={item.day}
             />
           );
         })}
       </div>
 
-      <div>
+      <div className="col-span-12 text-end text-xl font-semibold">
         Total de la commande:{" "}
         {location.state.itemsInCart.map((item) => {
           totalPrice += item.price * item.quantity;
@@ -41,15 +42,14 @@ export default function PaiementPage() {
         {totalPrice}€
       </div>
 
-      {/*Form info acheteur */}
-      {/*Mock paiement */}
+      <div className="col-span-12 my-8">
+        <p>Vos billets vous serons envoyé sur votre adresse e-mail.</p>
+      </div>
 
-      <button
-        className="col-span-6 border-2 border-emerald-500 rounded-full p-3 hover:bg-emerald-500 hover:text-white transition-all"
-        onClick={payOrder}
-      >
-        Payer la commande
-      </button>
+      <div className="col-span-12 my-5">
+        <h2>Informations de paiement:</h2>
+        <PaymentInfos userId={userId} state={location.state.itemsInCart} />
+      </div>
     </div>
   );
 }

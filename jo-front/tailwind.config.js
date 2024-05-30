@@ -8,6 +8,7 @@ module.exports = {
       },
       fontFamily: {
         mukta: ["mukta", "pt-serif", "sans-serif"],
+        rem: ["REM", "pt-serif", "sans-serif"],
       },
     },
   },

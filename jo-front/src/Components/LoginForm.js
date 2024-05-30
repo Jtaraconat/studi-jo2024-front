@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useRouteError } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -8,13 +8,20 @@ export default function LoginForm({ text, userUrl }) {
     email: "",
     password: "",
   });
-  const POST_URL = "http://localhost:8080/api/login";
-  const [userRole, setUserRole] = useState("");
+  const POST_URL =
+    "https://studi24-backend-540631c3ca2e.herokuapp.com/api/login";
   const navigate = useNavigate();
+  const [emailMessage, setEmailMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
 
-  function getEmail(e) {
-    e.preventDefault();
-    setCredentials({ ...credentials, email: e.target.value });
+  function handleEmail(e) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(e.target.value) === true && e.target.value !== "") {
+      setEmailMessage("");
+      setCredentials({ ...credentials, email: e.target.value });
+    } else {
+      setEmailMessage("L'adresse e-mail n'est pas valide");
+    }
   }
 
   function getPassword(e) {
@@ -25,14 +32,22 @@ export default function LoginForm({ text, userUrl }) {
   async function onSubmit(e) {
     e.preventDefault();
     try {
-      const res = await axios.post(POST_URL, credentials);
-      console.log(res.data);
+      if (credentials.email !== "" && credentials.password !== "") {
+        setEmailMessage("");
+        setPasswordMessage("");
+        const res = await axios.post(POST_URL, credentials);
 
-      Cookies.set("user-token", res.data.token);
-      Cookies.set("user-id", res.data.userId);
-      Cookies.set("firstname", res.data.firstname);
-      Cookies.set("lastname", res.data.lastname);
-      // navigate("/tickets");
+        Cookies.set("user-token", res.data.token);
+        Cookies.set("user-id", res.data.userId);
+        Cookies.set("firstname", res.data.firstname);
+        Cookies.set("lastname", res.data.lastname);
+
+        navigate("/tickets");
+        window.location.reload();
+      } else {
+        setPasswordMessage("Veuillez saisir un mot de passe");
+        setEmailMessage("Veuillez saisir un email");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -46,21 +61,27 @@ export default function LoginForm({ text, userUrl }) {
         </div>
 
         <div className="flex flex-col w-full">
-          <label htmlFor="e-mail">Email:</label>
-          <input
-            type="text"
-            id="e-mail"
-            className="border-2 rounded-lg p-1"
-            onChange={getEmail}
-          ></input>
+          <div className="flex flex-col">
+            <label htmlFor="e-mail">Email:</label>
+            <input
+              type="text"
+              id="e-mail"
+              className="border-2 rounded-lg p-1"
+              onChange={handleEmail}
+            ></input>
+            <p className="text-xs text-red-500">{emailMessage}</p>
+          </div>
 
-          <label htmlFor="password">Mot de passe:</label>
-          <input
-            type="password"
-            id="password"
-            className="border-2 rounded-lg p-1"
-            onChange={getPassword}
-          ></input>
+          <div className="flex flex-col">
+            <label htmlFor="password">Mot de passe:</label>
+            <input
+              type="password"
+              id="password"
+              className="border-2 rounded-lg p-1"
+              onChange={getPassword}
+            ></input>
+            <p className="text-xs text-red-500">{passwordMessage}</p>
+          </div>
         </div>
 
         <div className="flex flex-row justify-end">

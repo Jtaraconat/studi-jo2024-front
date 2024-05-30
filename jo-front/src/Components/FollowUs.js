@@ -1,18 +1,18 @@
 import React from "react";
-import facebook from "../Assets/RS/facebook-full.png";
-import instagram from "../Assets/RS/instagram-full.png";
-import twitter from "../Assets/RS/twitter-full.png";
-import tiktok from "../Assets/RS/tiktok-full.png";
-import youtube from "../Assets/RS/youtube-full.png";
-import linkedin from "../Assets/RS/linkedin-full.png";
+import facebook from "../Assets/RS/facebook.png";
+import instagram from "../Assets/RS/instagram.png";
+import twitter from "../Assets/RS/twitter.png";
+import tiktok from "../Assets/RS/tiktok.png";
+import youtube from "../Assets/RS/youtube.png";
+import linkedin from "../Assets/RS/linkedin.png";
 
 export default function FollowUs() {
   return (
-    <div className="col-span-12 grid grid-cols-12 gap-2  items-center p-3">
-      <div className="col-span-4 text-2xl font-bold text-center">
+    <div className="col-span-12 grid grid-cols-12 gap-2  items-center p-3 my-5">
+      <div className="col-span-12 md:col-span-4 text-2xl font-bold text-center">
         Suivez-nous sur vos réseaux sociaux préférés
       </div>
-      <div className="col-span-8 grid grid-cols-6 grid-rows-2 gap-2">
+      <div className="col-span-12 md:col-span-8 grid grid-cols-6 grid-rows-2 gap-2">
         <a
           href="https://www.facebook.com/Paris2024"
           className="col-start-2 flex justify-center"

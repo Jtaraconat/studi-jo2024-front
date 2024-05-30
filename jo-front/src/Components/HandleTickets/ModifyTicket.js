@@ -1,36 +1,42 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
 import football from "../../Assets/football.png";
 import basketball from "../../Assets/basketball.png";
 import handball from "../../Assets/handball.png";
 import athletisme from "../../Assets/athletisme.png";
 import rugby from "../../Assets/rugby.png";
+import AxiosConfig from "../../Utils/AxiosConfig";
 
 export default function ModifyTicket() {
   const location = useLocation();
   const sportsImage = [football, basketball, handball, athletisme, rugby];
   const [ticketModifications, setTicketModifications] = useState({
     id: location.state.offerToModify.id,
-    image: "/static/media/football.a65e79c9cf08584376f9.png",
-    ticketType: "Solo",
+    image: location.state.offerToModify.image,
+    ticketType: location.state.offerToModify.ticketType,
     eventName: location.state.offerToModify.eventName,
     sport: location.state.offerToModify.sport,
     city: location.state.offerToModify.city,
     time: location.state.offerToModify.time,
     price: location.state.offerToModify.price,
     eventLocation: location.state.offerToModify.eventLocation,
+    day: location.state.offerToModify.day,
   });
-  const [selectedSportImage, setSelectedSportImage] = useState("football");
-  const token = Cookies.get("user-token");
+  const [selectedSportImage, setSelectedSportImage] = useState(
+    location.state.image
+  );
   const navigate = useNavigate();
-  const POST_URI = `http://localhost:8080/api/ticket/${location.state.offerToModify.id}`;
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  const POST_URI = `https://studi24-backend-540631c3ca2e.herokuapp.com/api/ticket/${location.state.offerToModify.id}`;
 
-  console.log(token);
+  function handleDate(date) {
+    const splitted = date.split("-");
+    const day = splitted[2];
+    const month = splitted[1];
+    const year = splitted[0];
+    const newDate = day + "-" + month + "-" + year;
+    return newDate;
+  }
 
   function getImage(e) {
     e.preventDefault();
@@ -68,6 +74,13 @@ export default function ModifyTicket() {
     e.preventDefault();
     setTicketModifications({ ...ticketModifications, time: e.target.value });
   }
+  function getEventDay(e) {
+    e.preventDefault();
+    setTicketModifications({
+      ...ticketModifications,
+      day: handleDate(e.target.value),
+    });
+  }
 
   function getPrice(e) {
     e.preventDefault();
@@ -84,28 +97,36 @@ export default function ModifyTicket() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    console.log(ticketModifications);
-    console.log(POST_URI);
-    const res = axios.put(POST_URI, ticketModifications, config);
+    const res = axios.put(POST_URI, ticketModifications, AxiosConfig);
     navigate("/admin");
   }
 
   return (
-    <div className="grid grid-cols-12 border-2 rounded-lg p-3 items-center">
-      <div className="col-span-3">
+    <div className="grid grid-cols-12 p-2 items-center">
+      <div className="col-span-12">
+        <button
+          className="border-2 border-red-500 rounded-full p-3 hover:bg-red-500 hover:text-white transition-all"
+          onClick={() => navigate("/admin")}
+        >
+          Annuler
+        </button>
+      </div>
+
+      <div className="col-span-12 md:col-span-3">
+        <p className="text-center">Image d'origine</p>
         <img src={location.state.offerToModify.image} alt="sport" />
       </div>
 
-      <div className="col-span-9">
-        <div className="flex flex-row gap-4">
-          {sportsImage.map((img, e) => {
+      <div className="col-span-12 md:col-span-9">
+        <div className="grid grid-cols-12 md:flex flex-row gap-4">
+          {sportsImage.map((img) => {
             return (
-              <div className="border-2 rounded-lg flex flex-col justify-center ">
+              <div className="col-span-4 border-2 rounded-lg flex flex-col justify-center ">
                 <img src={img} key={img} />
                 <button
                   value={img}
                   onClick={getImage}
-                  className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all"
+                  className="border-2 border-joblue rounded-full p-1 md:p-3 hover:bg-joblue hover:text-white transition-all"
                 >
                   Sélectionner
                 </button>
@@ -157,6 +178,20 @@ export default function ModifyTicket() {
                 className="border-2 rounded-lg w-full"
                 onChange={getEventLocation}
                 placeholder="ex: Stade de France"
+              ></input>
+            </div>
+          </div>
+
+          <div className="col-span-12 ">
+            <p>Date: {location.state.offerToModify.day}</p>
+            <div className="">
+              <label htmlFor="day">Nouvel date</label>
+              <input
+                id="day"
+                name="day"
+                type="date"
+                className="border-2 rounded-lg w-full"
+                onChange={getEventDay}
               ></input>
             </div>
           </div>

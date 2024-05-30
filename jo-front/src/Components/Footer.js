@@ -12,7 +12,7 @@ export default function Footer() {
         </a>
       </div>
 
-      <div className="col-span-6 flex flex-col items-end text-white font-bold ">
+      <div className="col-span-6 flex flex-col items-end text-white">
         <a href="/">Accueil</a>
         <a href="/tickets">Tickets</a>
         <a href="/user">Espace utilisateur</a>

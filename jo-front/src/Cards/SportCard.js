@@ -4,7 +4,7 @@ export default function SportCard({ image, name, description }) {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
 
   return (
-    <div className="col-span-3 my-3 border rounded-xl p-3 shadow-xl">
+    <div className="col-span-6 md:col-span-3 my-3 border rounded-xl p-3 shadow-xl">
       <div className="rounded-lg">
         <img src={image} alt="sport" />
       </div>

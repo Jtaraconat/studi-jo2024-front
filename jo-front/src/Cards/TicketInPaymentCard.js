@@ -1,12 +1,22 @@
 import React from "react";
 
-export default function TicketInPaymentCard({ eventName, quantity, price }) {
+export default function TicketInPaymentCard({
+  eventName,
+  quantity,
+  price,
+  ticketType,
+  sport,
+  date,
+}) {
   return (
-    <div className="grid grid-cols-12 border-2 rounded-lg my-4 p-3">
+    <div className="grid grid-cols-12 border-2 shadow-lg rounded-lg my-4 p-3">
       <div className="col-span-12 grid grid-cols-12">
-        <div className="col-span-4">
-          <h2 className="">Evènement sélectionné: {eventName}</h2>
-          <p className="text-center">Prix unitaire: {price}</p>
+        <div className="col-span-12 ">
+          <p>Sport: {sport}</p>
+          <p className="">Evènement sélectionné: {eventName}</p>
+          <p>Le: {date}</p>
+          <p className="">Prix unitaire: {price}€</p>
+          <p>Offre: {ticketType}</p>
         </div>
       </div>
 

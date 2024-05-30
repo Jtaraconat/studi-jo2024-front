@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios, { Axios } from "axios";
-import Cookies from "js-cookie";
+import axios from "axios";
 import football from "../../Assets/football.png";
 import basketball from "../../Assets/basketball.png";
 import handball from "../../Assets/handball.png";
@@ -16,9 +15,19 @@ export default function AddTicket() {
   });
   const sportsImage = [football, basketball, handball, athletisme, rugby];
   const [selectedSportImage, setSelectedSportImage] = useState("football");
-  const token = Cookies.get("user-token");
   const navigate = useNavigate();
-  const POST_URI = "http://localhost:8080/api/ticket";
+  const POST_URI =
+    "https://studi24-backend-540631c3ca2e.herokuapp.com/api/ticket";
+  const [globalErrorMessage, setGlobalErrorMessage] = useState("");
+
+  function handleDate(date) {
+    const splitted = date.split("-");
+    const day = splitted[2];
+    const month = splitted[1];
+    const year = splitted[0];
+    const newDate = day + "-" + month + "-" + year;
+    return newDate;
+  }
 
   function getImage(e) {
     e.preventDefault();
@@ -46,6 +55,11 @@ export default function AddTicket() {
     setTicketToAdd({ ...ticketToAdd, eventLocation: e.target.value });
   }
 
+  function getEventDay(e) {
+    e.preventDefault();
+    setTicketToAdd({ ...ticketToAdd, day: handleDate(e.target.value) });
+  }
+
   function getEventTime(e) {
     e.preventDefault();
     setTicketToAdd({ ...ticketToAdd, time: e.target.value });
@@ -63,7 +77,6 @@ export default function AddTicket() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    console.log(ticketToAdd);
     const res = axios.post(POST_URI, ticketToAdd, AxiosConfig);
     navigate("/admin");
   }
@@ -71,6 +84,14 @@ export default function AddTicket() {
   return (
     <div className=" my-5">
       <form className="rounded-lg shadow-lg flex flex-col justify-around p-5">
+        <div>
+          <button
+            className="border-2 border-red-500 rounded-full p-3 hover:bg-red-500 hover:text-white transition-all"
+            onClick={() => navigate("/admin")}
+          >
+            Annuler
+          </button>
+        </div>
         <div className="text-center">
           <h2 className="text-3xl">Créer une offre</h2>
         </div>
@@ -79,15 +100,15 @@ export default function AddTicket() {
           <div className="my-5">
             <p>Sélectionner une image</p>
 
-            <div className="flex flex-row gap-4">
-              {sportsImage.map((img, e) => {
+            <div className="grid grid-cols-12 md:flex flex-row gap-4">
+              {sportsImage.map((img) => {
                 return (
-                  <div className="border-2 rounded-lg flex flex-col justify-center ">
+                  <div className="col-span-4 border-2 rounded-lg flex flex-col justify-center ">
                     <img src={img} key={img} />
                     <button
                       value={img}
                       onClick={getImage}
-                      className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all"
+                      className="border-2 border-joblue rounded-full p-1 md:p-3 hover:bg-joblue hover:text-white transition-all"
                     >
                       Sélectionner
                     </button>
@@ -113,6 +134,7 @@ export default function AddTicket() {
             id="sport"
             className="border-2 rounded-lg p-1"
             onChange={getSport}
+            placeholder="ex: Football"
           ></input>
 
           <label htmlFor="city">Ville:</label>
@@ -121,6 +143,7 @@ export default function AddTicket() {
             id="city"
             className="border-2 rounded-lg p-1"
             onChange={getCity}
+            placeholder="ex: Paris"
           ></input>
 
           <label htmlFor="location">Lieu de l'évènement:</label>
@@ -129,6 +152,15 @@ export default function AddTicket() {
             id="location"
             className="border-2 rounded-lg p-1"
             onChange={getEventLocation}
+            placeholder="ex: Stade de France"
+          ></input>
+
+          <label htmlFor="day">Date:</label>
+          <input
+            type="date"
+            id="day"
+            className="border-2 rounded-lg p-1"
+            onChange={getEventDay}
           ></input>
 
           <label htmlFor="time">Horaire:</label>
@@ -146,6 +178,7 @@ export default function AddTicket() {
             id="price"
             className="border-2 rounded-lg p-1"
             onChange={getPrice}
+            placeholder="ex: 150"
           ></input>
 
           <label htmlFor="ticketType">Type d'offre:</label>
@@ -161,12 +194,15 @@ export default function AddTicket() {
         </div>
 
         <div className="flex flex-row justify-end">
-          <button
-            className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all my-3"
-            onClick={onSubmit}
-          >
-            Créer l'offre
-          </button>
+          <div className="flex flex-col">
+            <button
+              className="border-2 border-joblue rounded-full p-3 hover:bg-joblue hover:text-white transition-all my-3"
+              onClick={onSubmit}
+            >
+              Créer l'offre
+            </button>
+            <p className="text-red-500">{globalErrorMessage}</p>
+          </div>
         </div>
       </form>
     </div>
